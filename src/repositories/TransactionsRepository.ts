@@ -28,13 +28,35 @@ class TransactionsRepository {
       .map(transaction =>
         transaction.type === 'income' ? transaction.value : 0,
       )
-      .reduce((total, currentValue) => total + currentValue);
+      .reduce((total, currentValue) => total + currentValue, 0);
 
     const outcome = this.transactions
       .map(transaction =>
-        transaction.type === 'income' ? transaction.value : 0,
+        transaction.type === 'outcome' ? transaction.value : 0,
       )
-      .reduce((total, currentValue) => total + currentValue);
+      .reduce((total, currentValue) => total + currentValue, 0);
+
+    // const incomeMap = this.transactions.map(transaction =>
+    //   transaction.type === 'income' ? transaction.value : 0,
+    // );
+
+    // if (incomeMap.length !== 0) {
+    //   income = incomeMap.reduce((total, currentValue) => total + currentValue);
+    // } else {
+    //   income = 0;
+    // }
+
+    // const outcomeMap = this.transactions.map(transaction =>
+    //   transaction.type === 'outcome' ? transaction.value : 0,
+    // );
+
+    // if (outcomeMap.length !== 0) {
+    //   outcome = outcomeMap.reduce(
+    //     (total, currentValue) => total + currentValue,
+    //   );
+    // } else {
+    //   outcome = 0;
+    // }
 
     const total = income - outcome;
 
@@ -43,12 +65,6 @@ class TransactionsRepository {
 
   public create({ title, value, type }: CreateTransactionDTO): Transaction {
     const transaction = new Transaction({ title, value, type });
-
-    const { total } = this.getBalance();
-
-    if (type === 'outcome' && value > total) {
-      // erro
-    }
 
     this.transactions.push(transaction);
 
